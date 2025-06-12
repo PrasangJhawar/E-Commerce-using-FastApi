@@ -42,8 +42,6 @@ def add_to_cart(
         )
         db.add(cart_item)
 
-    # Deduct stock
-    product.stock -= item.quantity
 
     db.commit()
     db.refresh(cart_item)
@@ -77,10 +75,6 @@ def remove_from_cart(
     if not cart_item:
         raise HTTPException(status_code=404, detail="Cart item not found")
 
-    #restoring product stock
-    product = db.query(Product).filter_by(id=product_id).first()
-    if product:
-        product.stock += cart_item.quantity
 
     db.delete(cart_item)
     db.commit()
@@ -109,7 +103,6 @@ def update_quantity(
     if quantity_diff > 0 and product.stock < quantity_diff:
         raise HTTPException(status_code=400, detail="Not enough stock available")
 
-    product.stock -= quantity_diff
     cart_item.quantity = item.quantity
 
     db.commit()
