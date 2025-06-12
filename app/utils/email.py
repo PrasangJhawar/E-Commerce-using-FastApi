@@ -5,7 +5,6 @@ from app.core.config import settings
 
 #SMTP setup
 
-
 def send_reset_email(to_email: str, reset_token: str):
     msg = MIMEMultipart()
     msg["From"] = settings.SMTP_USER
@@ -30,4 +29,4 @@ If you did not request this, please ignore this email.
             server.sendmail(settings.SMTP_USER, to_email, msg.as_string())
     except Exception as e:
         print("Email sending failed:", e)
-        raise
+        raise 
