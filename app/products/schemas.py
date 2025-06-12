@@ -10,7 +10,7 @@ from pydantic import BaseModel, field_validator, Field
 from typing import Optional
 
 class ProductBase(BaseModel):
-    name: str
+    name: str = Field(strip_whitespace=True, min_length=1)
     description: Optional[str]
     price: float = Field(..., gt=0)
     stock: int = Field(..., ge=0)
