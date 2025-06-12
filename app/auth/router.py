@@ -8,6 +8,7 @@ from datetime import timedelta
 from app.utils.email import send_reset_email
 from fastapi.responses import HTMLResponse
 from fastapi import Form
+import re
 
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -82,6 +83,8 @@ def reset_password(
     new_password: str = Form(...),
     db: Session = Depends(get_db)
 ):
+    validate_strong_password(new_password)
+
     email = utils.verify_password_reset_token(token)
     
     #no email found
@@ -97,3 +100,18 @@ def reset_password(
     user.password = hashed_password
     db.commit()
     return {"msg": "Password has been reset successfully"}
+
+
+
+
+#reset password strength checker
+def validate_strong_password(password: str):
+    if not re.search(r"[A-Z]", password):
+        raise HTTPException(status_code=400, detail="must have uppercase")
+    if not re.search(r"[a-z]", password):
+        raise HTTPException(status_code=400, detail="must have lowercase")
+    if not re.search(r"\d", password):
+        raise HTTPException(status_code=400, detail="must have digit")
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        raise HTTPException(status_code=400, detail="must have a special character")
+    

@@ -37,10 +37,10 @@ def list_products(
             column = column.desc()
         query = query.order_by(column)
 
-    """# Pagination
+    # Pagination
     offset = (page - 1) * page_size
     products = query.offset(offset).limit(page_size).all()
-    return products"""
+    return products
 
 
 # searching

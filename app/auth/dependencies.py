@@ -33,6 +33,13 @@ def admin_required(role: str = Depends(get_current_user_role)):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin privileges required",
         )
+    
+def user_required(role: str = Depends(get_current_user_role)):
+    if role != "user":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User privileges required",
+        )
 
 
 def get_current_user(
