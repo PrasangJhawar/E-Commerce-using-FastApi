@@ -1,11 +1,16 @@
 from pydantic import BaseModel, EmailStr, field_validator, constr, Field
 from uuid import UUID
 import re
+from enum import Enum
+
+class UserRole(str, Enum):
+    admin = "admin"
+    user = "user"
 
 class UserBase(BaseModel):
     name: str = Field(strip_whitespace=True, min_length=1)
     email: EmailStr
-    role: str = Field(..., pattern="^(admin|user)$")
+    role: UserRole
 
 class UserCreate(UserBase):
     password: str = Field(..., min_length=8)
@@ -27,7 +32,7 @@ class UserResponse(BaseModel):
     id: UUID
     name: str
     email: EmailStr
-    role: str
+    role: UserRole
 
     class Config:
         orm_mode = True
@@ -39,7 +44,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     user_id: str
-    role: str
+    role: UserRole
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
