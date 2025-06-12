@@ -47,3 +47,4 @@ class OrderSummaryResponse(BaseModel):
 
 class OrderDetailResponse(OrderSummaryResponse):
     items: List[OrderItemResponse]
+ 
