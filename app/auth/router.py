@@ -9,6 +9,10 @@ from app.utils.email import send_reset_email
 from fastapi.responses import HTMLResponse
 from fastapi import Form
 import re
+from jose import JWTError
+from app.auth.schemas import Token
+from jose import jwt
+
 
 from app.core.logger import setup_logger
 
