@@ -32,21 +32,25 @@ app/
    cd ecommerce-backend
 
 2. **Create and activate virtual environment**
+    ```bash
     python -m venv env
     source env/bin/activate  # on Windows: .\env\Scripts\activate
 
 3. **Install dependencies**
+    ```bash
     pip install -r requirements.txt
 
 4. **Set up environment variables**
+
     create a .env file or configure app/core/config.py
 
 5. **Run the app**
+    ```bash
     uvicorn app.main:app --reload
 
 
 
-**API Endpoints**
+## API Endpoints
 Explore API using the built-in Swagger docs:
     http://localhost:8000/docs
 
