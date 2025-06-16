@@ -13,43 +13,43 @@ This is a backend system for an e-commerce platform built using FastAPI, SQLAlch
 - Logging and input validation
 
 ## Project Structure
-
+```bash
 app/
-├── auth/            # User authentication
+├── auth/                  # User authentication
 │   ├── models.py
-|   ├── dependencies.py
+│   ├── dependencies.py
 │   ├── schemas.py
 │   ├── router.py
 │   └── utils.py
 │
-├── products/        # Product models and routes
+├── products/              # Product models and routes
 │   ├── models.py
 │   ├── schemas.py
 │   ├── admin_router.py
 │   └── public_products.py
 │
-├── cart/            # Cart-related APIs
+├── cart/                  # Cart-related APIs
 │   ├── models.py
 │   ├── schemas.py
 │   └── router.py
 │
-├── orders/          # Orders and Checkout
+├── orders/                # Orders and Checkout
 │   ├── models.py
 │   ├── schemas.py
 │   ├── router.py
 │   └── checkout.py
 │
-├── core/            # Database, settings, dependencies
+├── core/                  # Database, settings, dependencies
 │   ├── config.py
 │   ├── database.py
-│   └── dependencies.py
+│   ├── dependencies.py
 │   └── logger.py
 │
-├── utils/           # Utility functions (e.g., email)
+├── utils/                 # Utility functions (e.g., email)
 │   └── email.py
 │
-└── main.py          # FastAPI app entry point
-
+└── main.py                # FastAPI app entry point
+```
 
 ## Installation
 
