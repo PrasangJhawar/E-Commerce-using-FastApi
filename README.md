@@ -15,13 +15,40 @@ This is a backend system for an e-commerce platform built using FastAPI, SQLAlch
 ## Project Structure
 
 app/
-├── auth/ # User authentication
-├── products/ # Product models and routes
-├── cart/ # Cart-related APIs
-├── orders/ # Orders and Checkout
-├── core/ # Database, settings, dependencies
-├── utils/ # Utility functions (e.g., email)
-└── main.py # FastAPI app entry point
+├── auth/            # User authentication
+│   ├── models.py
+|   ├── dependencies.py
+│   ├── schemas.py
+│   ├── router.py
+│   └── utils.py
+│
+├── products/        # Product models and routes
+│   ├── models.py
+│   ├── schemas.py
+│   ├── admin_router.py
+│   └── public_products.py
+│
+├── cart/            # Cart-related APIs
+│   ├── models.py
+│   ├── schemas.py
+│   └── router.py
+│
+├── orders/          # Orders and Checkout
+│   ├── models.py
+│   ├── schemas.py
+│   ├── router.py
+│   └── checkout.py
+│
+├── core/            # Database, settings, dependencies
+│   ├── config.py
+│   ├── database.py
+│   └── dependencies.py
+│   └── logger.py
+│
+├── utils/           # Utility functions (e.g., email)
+│   └── email.py
+│
+└── main.py          # FastAPI app entry point
 
 
 ## Installation
