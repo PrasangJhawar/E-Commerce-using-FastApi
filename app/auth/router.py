@@ -46,14 +46,17 @@ def signup(user_data: schemas.UserCreate, db: Session = Depends(get_db)):
     
 
 @router.post("/signin", response_model=schemas.Token)
+#OAuth2 extracts data from x-www-form thing in postman
 def signin(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     try:
         logger.debug("Signin attempt for email: %s", form_data.username)
         user = db.query(models.User).filter(models.User.email == form_data.username).first()
         if not user or not utils.verify_password(form_data.password, user.password):
+            #credentials not matching
             logger.warning("Invalid signin attempt for email: %s", form_data.username)
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
+        #token generation
         access_token = utils.create_access_token(data={"sub": str(user.id), "role": user.role})
         refresh_token = utils.create_refresh_token(data={"sub": str(user.id), "role": user.role})
         logger.info("User signed in successfully: %s", user.email)
@@ -69,12 +72,13 @@ def forgot_password(request: schemas.ForgotPasswordRequest, db: Session = Depend
         user = db.query(models.User).filter(models.User.email == request.email).first()
         if not user:
             logger.info("Password reset link sent (email not registered): %s", request.email)
-            return {"msg": "reset link has been sent on your email"}
+            return {"msg": "if the email exists, a reset link has been sent"}
 
         reset_token = utils.create_password_reset_token(user.email)
 
         #sending reset email
         try:
+            #smtp method, email.py
             send_reset_email(to_email=user.email, reset_token=reset_token)
             logger.info("Password reset email sent to: %s", user.email)
         except Exception as e:
@@ -86,7 +90,7 @@ def forgot_password(request: schemas.ForgotPasswordRequest, db: Session = Depend
         logger.exception("Forgot password error: %s", str(e))
         raise HTTPException(status_code=500, detail="Internal server error")
 
-
+#generating a form for entering password
 @router.get("/reset-password", response_class=HTMLResponse)
 async def reset_password_form(token: str):
     html_content = f"""
@@ -107,6 +111,7 @@ async def reset_password_form(token: str):
 
 @router.post("/reset-password", status_code=200)
 def reset_password(
+    #Form expects custom keys, for kvp we have OAuth2
     token: str = Form(...),
     new_password: str = Form(...),
     db: Session = Depends(get_db)

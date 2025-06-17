@@ -14,6 +14,7 @@ from app.core.logger import setup_logger
 logger = setup_logger(__name__)
 router = APIRouter(prefix="/cart", tags=["Cart"])
 
+#add to cart_items
 @router.post("/", response_model=CartItemResponse, dependencies=[Depends(user_required)])
 def add_to_cart(
     item: CartItemCreate,
@@ -23,11 +24,13 @@ def add_to_cart(
     try:
         logger.debug("Adding to cart: user=%s, product=%s, qty=%d", current_user.id, item.product_id, item.quantity)
 
+        #product existence check
         product = db.query(Product).filter_by(id=item.product_id).first()
         if not product:
             logger.warning("Product not found: %s", item.product_id)
             raise HTTPException(status_code=404, detail="Product not found")
 
+        #stock check
         if product.stock < item.quantity:
             logger.warning("Insufficient stock for product %s", item.product_id)
             raise HTTPException(status_code=400, detail="Not enough stock available")
@@ -59,6 +62,8 @@ def add_to_cart(
     except Exception as e:
         logger.exception("Error while adding to cart: %s", str(e))
         raise HTTPException(status_code=500, detail="Internal server error")
+    
+#view cart
 @router.get("/", response_model=list[CartItemResponse], dependencies=[Depends(user_required)])
 def view_cart(
     db: Session = Depends(get_db),
@@ -66,6 +71,8 @@ def view_cart(
 ):
     try:
         logger.debug("Fetching cart for user: %s", current_user.id)
+
+        #joined with product info
         cart_items = (
             db.query(CartItem)
             .filter_by(user_id=current_user.id)
@@ -79,6 +86,8 @@ def view_cart(
         raise HTTPException(status_code=500, detail="Internal server error")
 
 #router-> logging and exceptions
+
+#remove item from cart
 @router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 def remove_from_cart(
     product_id: UUID,
@@ -104,7 +113,7 @@ def remove_from_cart(
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-
+#update cart item qty
 @router.put("/{product_id}", response_model=CartItemResponse)
 def update_quantity(
     product_id: UUID,

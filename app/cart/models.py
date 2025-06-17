@@ -12,4 +12,5 @@ class CartItem(Base):
     product_id = Column(UUID(as_uuid=True), ForeignKey("products.id", ondelete="CASCADE"), nullable=False)
     quantity = Column(Integer, nullable=False, default=1)
 
+    #all product things can be accessed via cart_items
     product = relationship("Product")

@@ -7,6 +7,7 @@ class CartItemBase(BaseModel):
     product_id: UUID
     quantity: int
 
+#future flexibility, so we have separation of concerns
 class CartItemCreate(CartItemBase):
     pass
 

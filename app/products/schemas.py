@@ -17,12 +17,13 @@ class ProductBase(BaseModel):
     category: Optional[str]
     image_url: Optional[str]
 
-
+#does nothing
 class ProductCreate(ProductBase):
     pass
 
 class ProductResponse(ProductBase):
     id: UUID
 
+    #facilitates to work with ORM objects instead of dict
     class Config:
         orm_mode = True
